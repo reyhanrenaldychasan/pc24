@@ -238,9 +238,13 @@
                 // $('#image').css("max-width", "400px");
             }
 
+            function adapterFunction(editor) {
+                MyCustomUploadAdapterPlugin(editor, "{{env('APP_URL')}}");
+            }
+
             ClassicEditor
             .create( document.querySelector( '#editor' ) , {
-                extraPlugins: [ MyCustomUploadAdapterPlugin ],
+                extraPlugins: [ adapterFunction ],
             })
             .catch( error => {
                 console.error( error );

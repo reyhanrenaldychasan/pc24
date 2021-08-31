@@ -38,8 +38,8 @@ class NewsController extends Controller
 
     private function newsMapping($news) {
         $news->map(function($item) {
-            $item->image = url('/storage/image/'.$item->image);
-            $item->thumbnail_image = url('/storage/image/compressed/'.$item->thumbnail_image);
+            $item->image = url('/upload/image/'.$item->image);
+            $item->thumbnail_image = url('/upload/image/compressed/'.$item->thumbnail_image);
             $item->raw_content = Str::limit(trim(strip_tags($item->content)), 175, '...');
             // $item->raw_content = trim(strip_tags($item->content));
             $item->title = Str::limit($item->title,50,'...');
@@ -155,7 +155,7 @@ class NewsController extends Controller
             $image->resize(300, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            Storage::disk('public_upload')->put($compressedPath, (string) $image->encode($image->mime, 40));
+            Storage::disk('public_upload')->put($compressedPath, (string) $image->encode($image->mime, 60));
 
             // Move image to new directory
             $contentImgs = $this->getImgSrcAtt($data['content']);
@@ -164,7 +164,7 @@ class NewsController extends Controller
                 Storage::disk('public_upload')->move('news-content-image/' . $contentImg, 'image/news-content-image/' .  $contentImg);
 
                 // change to full url for img src purpose
-                $contentImgs[$key] = url('storage/image/news-content-image/' . $contentImg);
+                $contentImgs[$key] = url('upload/image/news-content-image/' . $contentImg);
             }
 
             // Change img src in content to match the new directory
@@ -185,8 +185,8 @@ class NewsController extends Controller
             // Attach Many to Many (News Tags)
             $newNews->tags()->attach($data["tags"]);
     
-            $newNews->image = url('/storage/image/'.$newNews->image);
-            $newNews->thumbnail_image = url('/storage/image/compressed/'.$newNews->thumbnail_image);
+            $newNews->image = url('/upload/image/'.$newNews->image);
+            $newNews->thumbnail_image = url('/upload/image/compressed/'.$newNews->thumbnail_image);
 
             return $newNews;
         });
@@ -203,8 +203,8 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        $news->image = url('/storage/image/'.$news->image);
-        $news->thumbnail_image = url('/storage/image/compressed/'.$news->thumbnail_image);
+        $news->image = url('/upload/image/'.$news->image);
+        $news->thumbnail_image = url('/upload/image/compressed/'.$news->thumbnail_image);
 
         return $news->load('tags');
     }
@@ -218,8 +218,8 @@ class NewsController extends Controller
     public function edit(News $news)
     {
         $data['tags'] = Tag::orderBy('name', 'asc')->get();
-        $news->image = url('/storage/image/'.$news->image);
-        $news->thumbnail_image = url('/storage/image/compressed/'.$news->thumbnail_image);
+        $news->image = url('/upload/image/'.$news->image);
+        $news->thumbnail_image = url('/upload/image/compressed/'.$news->thumbnail_image);
         $data['news'] = $news->load('tags');
         // return $data['news'];
 
@@ -275,7 +275,7 @@ class NewsController extends Controller
                 $image->resize(300, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                Storage::disk('public_upload')->put($compressedPath, (string) $image->encode($image->mime, 40));
+                Storage::disk('public_upload')->put($compressedPath, (string) $image->encode($image->mime, 60));
 
                 $data["image"] = basename($path);
                 $data["thumbnail_image"] = basename($compressedPath);
@@ -302,7 +302,7 @@ class NewsController extends Controller
     
                     }
                     // change to full url for img src purpose
-                    $contentImgs[$key] = url('storage/image/news-content-image/' . $contentImg);
+                    $contentImgs[$key] = url('upload/image/news-content-image/' . $contentImg);
     
                 }
     
@@ -315,8 +315,8 @@ class NewsController extends Controller
                 $news->tags()->sync($data["tags"]);
             }
     
-            $news->image = url('/storage/image/'.$news->image);
-            $news->thumbnail_image = url('/storage/image/compressed/'.$news->thumbnail_image);
+            $news->image = url('/upload/image/'.$news->image);
+            $news->thumbnail_image = url('/upload/image/compressed/'.$news->thumbnail_image);
 
         });
 

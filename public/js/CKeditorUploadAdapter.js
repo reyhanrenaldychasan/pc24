@@ -1,7 +1,8 @@
 class MyUploadAdapter {
-  constructor( loader ) {
+  constructor( loader, appUrl ) {
       // The file loader instance to use during the upload.
       this.loader = loader;
+      this.appUrl = appUrl;
   }
 
   // Starts the upload process.
@@ -29,7 +30,8 @@ class MyUploadAdapter {
       // integration to choose the right communication channel. This example uses
       // a POST request with JSON as a data structure but your configuration
       // could be different.
-      xhr.open( 'POST', 'http://localhost/pc24/public/api/news-content-image', true );
+      console.log(this.appUrl);
+      xhr.open( 'POST', this.appUrl + '/api/news-content-image', true );
       xhr.responseType = 'json';
   }
 
@@ -93,8 +95,9 @@ class MyUploadAdapter {
   }
 }
 
-function MyCustomUploadAdapterPlugin( editor ) {
+function MyCustomUploadAdapterPlugin( editor, appUrl ) {
+    console.log('a '+ appUrl);
   editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-      return new MyUploadAdapter( loader );
+      return new MyUploadAdapter( loader , appUrl);
   };
 }

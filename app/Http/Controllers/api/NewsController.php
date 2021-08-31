@@ -284,7 +284,7 @@ class NewsController extends Controller
 
         $path = $file->storeAs('news-content-image', $imageName, 'public_upload');
         // Storage::disk('public_upload')->putFileAs('news-content-image/', $file);
-        return response()->json(['url' => url('/storage/news-content-image/' . $imageName)], 200);
+        return response()->json(['url' => url('/upload/news-content-image/' . $imageName)], 200);
     }
 
 }
